@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        
+        <h:form binding="#{personListController.component}">
+            <h:panelGrid columns="2">
+
+                <p:outputLabel value="Фамилия: "/>
+                <p:inputText required="true" value="#{personListController.newPerson.surname}"/>
+
+                <p:outputLabel value="Имя: "/>
+                <p:inputText required="true" value="#{personListController.newPerson.name}"/>
+
+                <p:outputLabel value="Отчество: "/>
+                <p:inputText required="true" value="#{personListController.newPerson.patronymic}"/>
+
+                <p:outputLabel value="Пол: "/>
+                <p:selectOneRadio value="#{personListController.newPerson.sex}">
+                    <f:selectItem itemValue="#{true}" itemLabel="М"/>
+                    <f:selectItem itemValue="#{false}" itemLabel="Ж"/>
+                </p:selectOneRadio>
+                    
+                <p:outputLabel value="Дата рождения: "/>
+                <p:calendar value="#{personListController.newPerson.dateBirthday}" pattern="dd/MM/yyyy" navigator="true"/>
+                
+                <p:outputLabel value="Улица: "/>
+                <h:selectOneMenu value="#{personListController.inputAddress.street}" converter="StreetConverter">
+                    <f:selectItems value="${streetController.streetMap}"/>
+                </h:selectOneMenu>
+                
+                <p:outputLabel value="Номер дома: "/>
+                <p:inputText required="true" value="#{personListController.inputAddress.number}"/>
+                
+            </h:panelGrid> 
+                
+            <h:messages style="color: red"/>
+            <h:commandButton value="Добавить" actionListener = "#{personListController.saveNewPerson()}"/>
+
+        </h:form>
+
+        
+        <h3>
+            Список людей
+        </h3>
+        
+        <h:dataTable value="#{personListController.allPersonList}" var="person">
+            <h:column>
+                <f:facet name="header">Фамилия</f:facet>
+                #{person.surname}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Имя</f:facet>
+                #{person.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Отчество</f:facet>
+                #{person.patronymic}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Дата рождения</f:facet>
+                #{person.dateBirthday}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Улица</f:facet>
+                #{person.address.street.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Номер дома</f:facet>
+                #{person.address.number}
+            </h:column>
+        </h:dataTable>
+    </h:body>
+</html>
+
