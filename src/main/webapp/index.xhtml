@@ -12,39 +12,90 @@
     <h:body>
 
         <h:form> 
-            <h:commandButton value="Добавить человека в базу" action="#{personListController.switchAddMode()}"/>
-        </h:form> 
-
-        <h3>
-            Список людей
-        </h3>
-
-        <h:dataTable value="#{personListController.allPersonList}" var="person">
-            <h:column>
-                <f:facet name="header">Фамилия</f:facet>
+            <h:commandButton immediate="true" value="Добавить человека в базу" action="#{personListController.switchAddMode()}"/>
+         
+            <h3>Список людей</h3>
+            <div>
+                Включить фильтр
+                <h:selectBooleanCheckbox  immediate="true" value="#{personListController.needFilter}"/>
+                <h:commandButton value="Применить" action="#{personListController.updateCurrentList()}"/>
+            </div>
+            <h:messages style="color: red"/>
+            <h:dataTable id="personTable" value="#{personListController.currentList}" var="person">
+                <h:column>
+                    <f:facet name="header">
+                        Фильтр фамилии
+                        <p>
+                            <h:inputText  value="#{personListController.personFilter.surname}"/>
+                        </p>
+                        Фамилия
+                    </f:facet>
                     #{person.surname}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Имя</f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        Фильтр имени
+                        <p><h:inputText value="#{personListController.personFilter.name}"/></p>
+                        Имя
+                    </f:facet>
                     #{person.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Отчество</f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        Дата рождения От
+                        <p>
+                            <p:calendar placeholder="yyyy-mm-dd" value="#{personListController.personFilter.dateBirthdayMin}" mask="true" pattern="yyyy-mm-dd" navigator="true"/>
+                        </p>
+                        Отчество
+                    </f:facet>
                     #{person.patronymic}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Дата рождения</f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        Дата рождения До
+                        <p>
+                            <p:calendar placeholder="yyyy-mm-dd" value="#{personListController.personFilter.dateBirthdayMax}" mask="true" pattern="yyyy-mm-dd" navigator="true"/>
+                        </p>
+                        Дата рождения
+                    </f:facet>
                     #{person.dateBirthday}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Улица</f:facet>
+                </h:column>
+                <h:column> 
+                    <f:facet name="header">
+                        Пол
+                        <p>
+                            <h:selectOneMenu value="#{personListController.personFilter.sex}">
+                                <f:selectItem itemValue="#{null}" itemLabel=""/>
+                                <f:selectItem itemValue="#{true}" itemLabel="М"/>
+                                <f:selectItem itemValue="#{false}" itemLabel="Ж"/>
+                            </h:selectOneMenu>
+                        </p>
+                        Пол
+                    </f:facet>
+                    #{person.sex ? "М" : "Ж"}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        Фильтр улицы
+                        <p>
+                            <h:selectOneMenu value="#{personListController.personFilter.street}" converter="StreetConverter">
+                                <f:selectItems value="#{streetController.streetMap}"/>
+                            </h:selectOneMenu>                        
+                        </p>
+                        Улица
+                    </f:facet>
                     #{person.address.street.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Номер дома</f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        Фильтр дома
+                        <p><h:inputText value="#{personListController.personFilter.buildingNum}"/></p>
+                        Номер дома
+                    </f:facet>
                     #{person.address.number}
-            </h:column>
-        </h:dataTable>
+                </h:column>
+            </h:dataTable>
+        </h:form>
     </h:body>
 </html>
 
