@@ -29,26 +29,24 @@ public class PersonListController implements Serializable{
     }
     
     public PersonListController() {
-        createEmptyBeans();
     }
     
-    public void saveNewPerson(){
+    public String saveNewPerson(){
         Address existAddress = DataHelper.getInstance().getAddress(inputAddress.getNumber(), inputAddress.getStreet());
         if(existAddress != null){
             inputAddress = existAddress;
         }
         newPerson.setAddress(inputAddress);
-        DataHelper.getInstance().getAddress(newPerson.getAddress().getNumber(), newPerson.getAddress().getStreet());
-        
         DataHelper.getInstance().addPerson(newPerson);
         
         FacesContext.getCurrentInstance().addMessage(component.getClientId(), new FacesMessage("Данные добавлены"));
-        createEmptyBeans();
+        return "index?faces-redirect=true";
     }
     
-    private void createEmptyBeans(){
+    public String switchAddMode(){
         newPerson = new Person();
         inputAddress = new Address();
+        return "add_person?faces-redirect=true";
     }
 
     public Person getNewPerson() {
